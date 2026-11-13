@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pa">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#236b45">
+<title>Grandmother Dairy Farmer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="logo">🐄</div><div><h1>Grandmother Dairy Farmer</h1><p id="subtitle">ਡੇਅਰੀ ਫਾਰਮ ਰਿਕਾਰਡ ਬੁੱਕ</p></div><button id="langBtn">EN</button></header>
+<nav>
+<button data-tab="animals" class="active">ਗਾਂਵਾਂ</button>
+<button data-tab="milk">ਦੁੱਧ</button>
+<button data-tab="events">ਹੈਲਥ / ਬ੍ਰੀਡਿੰਗ</button>
+<button data-tab="backup">Backup</button>
+</nav>
+<main>
+<section id="animals" class="tab active">
+<h2>ਗਾਂ / ਵੱਛੀ ਦਾ ਰਿਕਾਰਡ</h2>
+<form id="animalForm">
+<input name="tag" placeholder="Tag No. *" required>
+<div class="grid"><input name="breed" placeholder="ਨਸਲ / Breed"><input name="lactation" type="number" min="0" placeholder="Lactation"></div>
+<div class="grid"><input name="dob" type="date" aria-label="Date of birth"><input name="service" type="date" aria-label="Service date"></div>
+<div class="grid"><input name="calving" type="date" aria-label="Calving date"><input name="dry" type="date" aria-label="Dry date"></div>
+<textarea name="notes" placeholder="ਹੋਰ ਜਾਣਕਾਰੀ"></textarea>
+<button class="primary">ਰਿਕਾਰਡ ਸੰਭਾਲੋ</button>
+</form><div id="animalList"></div>
+</section>
+<section id="milk" class="tab">
+<h2>ਰੋਜ਼ਾਨਾ ਦੁੱਧ</h2>
+<form id="milkForm">
+<input name="date" type="date" required>
+<input name="tag" placeholder="Tag No." required>
+<input name="morning" type="number" step=".1" min="0" placeholder="ਸਵੇਰ ਦਾ ਦੁੱਧ (kg)">
+<input name="evening" type="number" step=".1" min="0" placeholder="ਸ਼ਾਮ ਦਾ ਦੁੱਧ (kg)">
+<button class="primary">ਦੁੱਧ ਸੰਭਾਲੋ</button>
+</form><div id="milkList"></div>
+</section>
+<section id="events" class="tab">
+<h2>ਹੈਲਥ / ਬ੍ਰੀਡਿੰਗ / ਵੈਕਸੀਨ</h2>
+<form id="eventForm">
+<input name="date" type="date" required>
+<input name="tag" placeholder="Tag No." required>
+<select name="type"><option>Heat</option><option>Service / AI</option><option>Pregnancy check</option><option>Calving</option><option>Vaccination</option><option>Treatment</option><option>Other</option></select>
+<textarea name="details" placeholder="ਦਵਾਈ, ਵੈਕਸੀਨ, ਡਾਕਟਰ ਜਾਂ ਹੋਰ ਵੇਰਵਾ"></textarea>
+<button class="primary">ਵੇਰਵਾ ਸੰਭਾਲੋ</button>
+</form><div id="eventList"></div>
+</section>
+<section id="backup" class="tab">
+<h2>Backup / Restore</h2><p>ਆਪਣੇ ਰਿਕਾਰਡ ਦੀ ਕਾਪੀ ਫੋਨ ਵਿੱਚ ਸੰਭਾਲੋ।</p>
+<button class="primary" id="exportBtn">Backup Download ਕਰੋ</button>
+<label class="filebtn">Backup Restore ਕਰੋ<input id="importFile" type="file" accept="application/json"></label>
+<p class="hint">ਰਿਕਾਰਡ ਇਸ ਫੋਨ ਵਿੱਚ offline ਰਹਿੰਦੇ ਹਨ। ਫੋਨ ਬਦਲਣ ਤੋਂ ਪਹਿਲਾਂ backup ਜ਼ਰੂਰ ਲਵੋ।</p>
+</section>
+</main>
+<footer>Made for your dairy farm ❤️</footer>
+<script src="app.js"></script>
+</body></html>
