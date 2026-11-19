@@ -1,58 +1,150 @@
 <!doctype html>
 <html lang="pa">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#236b45">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#315c3b"><link rel="manifest" href="manifest.webmanifest">
 <title>Grandmother Dairy Farmer</title>
-<link rel="stylesheet" href="style.css">
+<style>
+:root{--green:#315c3b;--green2:#477b50;--cream:#f7f6ee;--card:#fff;--ink:#203126;--muted:#68766b;--line:#e3e9df}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);font-family:system-ui,-apple-system,"Noto Sans Gurmukhi",sans-serif;color:var(--ink)}
+header{background:linear-gradient(135deg,var(--green),#638b55);color:white;padding:18px 16px 20px;border-radius:0 0 22px 22px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:52px;height:52px;border-radius:16px;background:#fff2;display:grid;place-items:center;font-size:30px}
+h1{font-size:20px;margin:0}header p{margin:4px 0 0;font-size:12px;opacity:.9}
+.top{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:8px}
+select,button,input,textarea{font:inherit}button,select{border:0;border-radius:12px;padding:10px 12px}
+.lang{background:#ffffff24;color:white;border:1px solid #ffffff55}
+main{padding:14px;max-width:760px;margin:auto}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 2px 8px #20312608}
+.stat small{color:var(--muted)}.stat strong{display:block;font-size:23px;margin-top:5px;color:var(--green)}
+nav{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0}
+nav button{background:#e7eee4;color:var(--green);font-size:12px;padding:10px 4px;font-weight:650}
+nav button.active{background:var(--green);color:white}
+h2{font-size:18px;margin:4px 0 12px}.panel{margin-bottom:12px}
+label{display:block;font-size:12px;color:var(--muted);margin:9px 0 4px}
+input,select,textarea{width:100%;background:#f8faf6;border:1px solid var(--line);padding:11px;border-radius:10px;color:var(--ink)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.primary{background:var(--green);color:white;width:100%;margin-top:12px;font-weight:650}
+.secondary{background:#e7eee4;color:var(--green)}
+.item{border-top:1px solid var(--line);padding:10px 0;display:flex;justify-content:space-between;gap:10px}
+.item:first-child{border-top:0}.item b{display:block}.muted{color:var(--muted);font-size:12px}
+.del{background:#fff0ed;color:#a33;padding:7px 10px}
+.empty{color:var(--muted);text-align:center;padding:18px 5px}
+.hidden{display:none!important}.notice{font-size:12px;color:var(--muted);line-height:1.5}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
+@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}nav{grid-template-columns:repeat(7,1fr)}}
+</style>
 </head>
 <body>
-<header><div class="logo">🐄</div><div><h1>Grandmother Dairy Farmer</h1><p id="subtitle">ਡੇਅਰੀ ਫਾਰਮ ਰਿਕਾਰਡ ਬੁੱਕ</p></div><button id="langBtn">EN</button></header>
-<nav>
-<button data-tab="animals" class="active">ਗਾਂਵਾਂ</button>
-<button data-tab="milk">ਦੁੱਧ</button>
-<button data-tab="events">ਹੈਲਥ / ਬ੍ਰੀਡਿੰਗ</button>
-<button data-tab="backup">Backup</button>
-</nav>
+<header>
+ <div class="brand"><div class="logo">🐄</div><div><h1>Grandmother Dairy Farmer</h1><p id="subtitle">ਡੇਅਰੀ ਫਾਰਮ ਰਿਕਾਰਡ ਬੁੱਕ</p></div></div>
+ <div class="top"><span id="today"></span><select class="lang" id="lang" onchange="setLang(this.value)"><option value="pa">ਪੰਜਾਬੀ</option><option value="en">English</option></select></div>
+</header>
 <main>
-<section id="animals" class="tab active">
-<h2>ਗਾਂ / ਵੱਛੀ ਦਾ ਰਿਕਾਰਡ</h2>
-<form id="animalForm">
-<input name="tag" placeholder="Tag No. *" required>
-<div class="grid"><input name="breed" placeholder="ਨਸਲ / Breed"><input name="lactation" type="number" min="0" placeholder="Lactation"></div>
-<div class="grid"><input name="dob" type="date" aria-label="Date of birth"><input name="service" type="date" aria-label="Service date"></div>
-<div class="grid"><input name="calving" type="date" aria-label="Calving date"><input name="dry" type="date" aria-label="Dry date"></div>
-<textarea name="notes" placeholder="ਹੋਰ ਜਾਣਕਾਰੀ"></textarea>
-<button class="primary">ਰਿਕਾਰਡ ਸੰਭਾਲੋ</button>
-</form><div id="animalList"></div>
+<section id="dashboard">
+ <div class="stats">
+  <div class="stat"><small data-i="cows">ਕੁੱਲ ਪਸ਼ੂ</small><strong id="cowCount">0</strong></div>
+  <div class="stat"><small data-i="milkToday">ਅੱਜ ਦਾ ਦੁੱਧ (L)</small><strong id="milkToday">0</strong></div>
+  <div class="stat"><small data-i="income">ਕੁੱਲ ਆਮਦਨ</small><strong id="incomeTotal">₹0</strong></div>
+  <div class="stat"><small data-i="expense">ਕੁੱਲ ਖਰਚਾ</small><strong id="expenseTotal">₹0</strong></div>
+ </div>
+ <div class="panel"><h2 data-i="quick">ਫਾਰਮ ਦੀ ਜਾਣਕਾਰੀ</h2><p class="notice" data-i="intro">ਇਸ ਐਪ ਵਿੱਚ ਪਸ਼ੂ, ਦੁੱਧ, ਬਰੀਡਿੰਗ, ਸਿਹਤ, ਖੁਰਾਕ ਅਤੇ ਆਮਦਨ ਦੇ ਰਿਕਾਰਡ ਇਸ ਫੋਨ ਵਿੱਚ ਸੰਭਾਲੇ ਜਾਂਦੇ ਹਨ।</p><p class="notice" id="storageNote">Offline record: ਇਸ ਫੋਨ ਵਿੱਚ ਸੇਵ ਹੁੰਦਾ ਹੈ।</p></div>
+ <div class="panel"><h2 data-i="recent">ਹਾਲੀਆ ਰਿਕਾਰਡ</h2><div id="recentList" class="empty">ਹਾਲੇ ਕੋਈ ਰਿਕਾਰਡ ਨਹੀਂ</div></div>
 </section>
-<section id="milk" class="tab">
-<h2>ਰੋਜ਼ਾਨਾ ਦੁੱਧ</h2>
-<form id="milkForm">
-<input name="date" type="date" required>
-<input name="tag" placeholder="Tag No." required>
-<input name="morning" type="number" step=".1" min="0" placeholder="ਸਵੇਰ ਦਾ ਦੁੱਧ (kg)">
-<input name="evening" type="number" step=".1" min="0" placeholder="ਸ਼ਾਮ ਦਾ ਦੁੱਧ (kg)">
-<button class="primary">ਦੁੱਧ ਸੰਭਾਲੋ</button>
-</form><div id="milkList"></div>
+<nav id="nav">
+<button class="active" data-tab="cows" onclick="tab('cows')" data-i="cowsTab">ਪਸ਼ੂ</button>
+<button data-tab="milk" onclick="tab('milk')" data-i="milkTab">ਦੁੱਧ</button>
+<button data-tab="breed" onclick="tab('breed')" data-i="breedTab">ਬਰੀਡਿੰਗ</button>
+<button data-tab="health" onclick="tab('health')" data-i="healthTab">ਸਿਹਤ</button>
+<button data-tab="feed" onclick="tab('feed')" data-i="feedTab">ਖੁਰਾਕ</button>
+<button data-tab="money" onclick="tab('money')" data-i="moneyTab">ਹਿਸਾਬ</button>
+<button data-tab="backup" onclick="tab('backup')" data-i="backupTab">ਬੈਕਅੱਪ</button>
+</nav>
+<section id="cows" class="tab">
+ <div class="panel"><h2 data-i="addCow">ਨਵਾਂ ਪਸ਼ੂ ਜੋੜੋ</h2>
+ <div class="row"><div><label data-i="tag">ਟੈਗ ਨੰਬਰ</label><input id="cowTag" placeholder="ਜਿਵੇਂ 40432"></div><div><label data-i="name">ਨਾਮ</label><input id="cowName"></div></div>
+ <div class="row"><div><label data-i="breed">ਨਸਲ</label><input id="cowBreed" placeholder="HF / Jersey"></div><div><label data-i="lactation">ਲੈਕਟੇਸ਼ਨ</label><input id="cowLact" type="number" min="0"></div></div>
+ <div class="row"><div><label data-i="dob">ਜਨਮ ਮਿਤੀ</label><input id="cowDob" type="date"></div><div><label data-i="status">ਹਾਲਤ</label><select id="cowStatus"><option>Milking</option><option>Dry</option><option>Heifer</option><option>Calf</option></select></div></div>
+ <label data-i="notes">ਨੋਟ</label><textarea id="cowNotes" rows="2"></textarea><button class="primary" onclick="addCow()" data-i="saveCow">ਪਸ਼ੂ ਸੇਵ ਕਰੋ</button></div>
+ <div class="panel"><h2 data-i="cowList">ਪਸ਼ੂਆਂ ਦੀ ਲਿਸਟ</h2><div id="cowList"></div></div>
 </section>
-<section id="events" class="tab">
-<h2>ਹੈਲਥ / ਬ੍ਰੀਡਿੰਗ / ਵੈਕਸੀਨ</h2>
-<form id="eventForm">
-<input name="date" type="date" required>
-<input name="tag" placeholder="Tag No." required>
-<select name="type"><option>Heat</option><option>Service / AI</option><option>Pregnancy check</option><option>Calving</option><option>Vaccination</option><option>Treatment</option><option>Other</option></select>
-<textarea name="details" placeholder="ਦਵਾਈ, ਵੈਕਸੀਨ, ਡਾਕਟਰ ਜਾਂ ਹੋਰ ਵੇਰਵਾ"></textarea>
-<button class="primary">ਵੇਰਵਾ ਸੰਭਾਲੋ</button>
-</form><div id="eventList"></div>
-</section>
-<section id="backup" class="tab">
-<h2>Backup / Restore</h2><p>ਆਪਣੇ ਰਿਕਾਰਡ ਦੀ ਕਾਪੀ ਫੋਨ ਵਿੱਚ ਸੰਭਾਲੋ।</p>
-<button class="primary" id="exportBtn">Backup Download ਕਰੋ</button>
-<label class="filebtn">Backup Restore ਕਰੋ<input id="importFile" type="file" accept="application/json"></label>
-<p class="hint">ਰਿਕਾਰਡ ਇਸ ਫੋਨ ਵਿੱਚ offline ਰਹਿੰਦੇ ਹਨ। ਫੋਨ ਬਦਲਣ ਤੋਂ ਪਹਿਲਾਂ backup ਜ਼ਰੂਰ ਲਵੋ।</p>
-</section>
-</main>
-<footer>Made for your dairy farm ❤️</footer>
-<script src="app.js"></script>
+<section id="milk" class="tab hidden"><div class="panel"><h2 data-i="milkEntry">ਦੁੱਧ ਐਂਟਰੀ</h2>
+ <label data-i="animal">ਪਸ਼ੂ / ਟੈਗ ਨੰਬਰ</label><select id="milkCow"></select>
+ <div class="row"><div><label data-i="date">ਮਿਤੀ</label><input id="milkDate" type="date"></div><div><label data-i="shift">ਵੇਲਾ</label><select id="milkShift"><option>Morning</option><option>Evening</option></select></div></div>
+ <label data-i="litres">ਦੁੱਧ (ਲੀਟਰ)</label><input id="milkLitres" type="number" step=".1">
+ <button class="primary" onclick="addMilk()" data-i="save">ਸੇਵ ਕਰੋ</button></div><div class="panel"><h2 data-i="history">ਦੁੱਧ ਹਿਸਟਰੀ</h2><div id="milkList"></div></div></section>
+<section id="breed" class="tab hidden"><div class="panel"><h2 data-i="breedEntry">ਬਰੀਡਿੰਗ / ਸਰਵਿਸ ਰਿਕਾਰਡ</h2>
+ <label data-i="animal">ਪਸ਼ੂ / ਟੈਗ ਨੰਬਰ</label><select id="breedCow"></select>
+ <div class="row"><div><label data-i="serviceDate">ਸਰਵਿਸ ਮਿਤੀ</label><input id="serviceDate" type="date"></div><div><label data-i="bull">ਬੁੱਲ / ਸੀਮਨ</label><input id="bull"></div></div>
+ <div class="row"><div><label data-i="attempt">ਸਰਵਿਸ ਨੰਬਰ</label><select id="attempt"><option>1</option><option>2</option><option>3</option></select></div><div><label data-i="dueDate">ਅੰਦਾਜ਼ਨ ਕੈਲਵਿੰਗ ਮਿਤੀ</label><input id="dueDate" type="date"></div></div>
+ <label data-i="calvingDate">ਕੈਲਵਿੰਗ ਮਿਤੀ (ਜੇ ਹੋ ਗਈ)</label><input id="calvingDate" type="date">
+ <label data-i="calf">ਵੱਛੇ ਦੀ ਜਾਣਕਾਰੀ</label><input id="calf">
+ <button class="primary" onclick="addBreed()" data-i="save">ਸੇਵ ਕਰੋ</button></div><div class="panel"><h2 data-i="history">ਹਿਸਟਰੀ</h2><div id="breedList"></div></div></section>
+<section id="health" class="tab hidden"><div class="panel"><h2 data-i="healthEntry">ਸਿਹਤ / ਵੈਕਸੀਨ ਰਿਕਾਰਡ</h2>
+ <label data-i="animal">ਪਸ਼ੂ / ਟੈਗ ਨੰਬਰ</label><select id="healthCow"></select>
+ <div class="row"><div><label data-i="date">ਮਿਤੀ</label><input id="healthDate" type="date"></div><div><label data-i="kind">ਕਿਸਮ</label><select id="healthKind"><option>Vaccination</option><option>Treatment</option><option>Deworming</option><option>Checkup</option></select></div></div>
+ <label data-i="detail">ਦਵਾਈ / ਵੈਕਸੀਨ / ਵੇਰਵਾ</label><input id="healthDetail">
+ <div class="row"><div><label data-i="dose">ਡੋਜ਼</label><input id="healthDose"></div><div><label data-i="nextDate">ਅਗਲੀ ਮਿਤੀ</label><input id="healthNext" type="date"></div></div>
+ <button class="primary" onclick="addHealth()" data-i="save">ਸੇਵ ਕਰੋ</button></div><div class="panel"><h2 data-i="history">ਹਿਸਟਰੀ</h2><div id="healthList"></div></div></section>
+<section id="feed" class="tab hidden"><div class="panel"><h2 data-i="feedEntry">ਖੁਰਾਕ ਰਿਕਾਰਡ</h2>
+ <label data-i="animal">ਪਸ਼ੂ / ਟੈਗ (ਖਾਲੀ ਛੱਡੋ ਤਾਂ ਸਾਰੇ ਪਸ਼ੂ)</label><select id="feedCow"></select>
+ <div class="row"><div><label data-i="date">ਮਿਤੀ</label><input id="feedDate" type="date"></div><div><label data-i="feedType">ਖੁਰਾਕ</label><input id="feedType" placeholder="Silage / Turi / Feed"></div></div>
+ <div class="row"><div><label data-i="quantity">ਮਾਤਰਾ (kg)</label><input id="feedQty" type="number" step=".1"></div><div><label data-i="cost">ਖਰਚਾ (₹)</label><input id="feedCost" type="number" step=".01"></div></div>
+ <button class="primary" onclick="addFeed()" data-i="save">ਸੇਵ ਕਰੋ</button></div><div class="panel"><h2 data-i="history">ਹਿਸਟਰੀ</h2><div id="feedList"></div></div></section>
+<section id="money" class="tab hidden"><div class="panel"><h2 data-i="moneyEntry">ਆਮਦਨ / ਖਰਚਾ</h2>
+ <div class="row"><div><label data-i="date">ਮਿਤੀ</label><input id="moneyDate" type="date"></div><div><label data-i="kind">ਕਿਸਮ</label><select id="moneyKind"><option value="income">Income</option><option value="expense">Expense</option></select></div></div>
+ <label data-i="detail">ਵੇਰਵਾ</label><input id="moneyDetail" placeholder="Milk sale / Feed purchase">
+ <label data-i="amount">ਰਕਮ (₹)</label><input id="moneyAmount" type="number" step=".01">
+ <button class="primary" onclick="addMoney()" data-i="save">ਸੇਵ ਕਰੋ</button></div><div class="panel"><h2 data-i="history">ਹਿਸਟਰੀ</h2><div id="moneyList"></div></div></section>
+<section id="backup" class="tab hidden"><div class="panel"><h2 data-i="backupTitle">ਡਾਟਾ ਬੈਕਅੱਪ</h2><p class="notice" data-i="backupInfo">ਇਹ ਵਰਜਨ ਰਿਕਾਰਡ ਇਸ ਫੋਨ ਵਿੱਚ ਰੱਖਦਾ ਹੈ। ਦੂਜੇ ਫੋਨ ਨਾਲ ਆਪਣੇ ਆਪ sync ਨਹੀਂ ਹੁੰਦਾ। ਬੈਕਅੱਪ ਫਾਈਲ ਡਾਊਨਲੋਡ ਕਰਕੇ ਸੰਭਾਲੋ।</p>
+ <button class="primary" onclick="exportData()" data-i="export">ਬੈਕਅੱਪ ਡਾਊਨਲੋਡ ਕਰੋ</button>
+ <label data-i="restore">ਬੈਕਅੱਪ ਫਾਈਲ ਵਾਪਸ ਲੋਡ ਕਰੋ</label><input type="file" id="restoreFile" accept=".json,application/json" onchange="importData(event)">
+ <button class="secondary" style="width:100%;margin-top:12px" onclick="window.print()" data-i="print">ਰਿਕਾਰਡ ਪ੍ਰਿੰਟ ਕਰੋ</button>
+ <p class="notice" style="margin-top:14px">Google login ਅਤੇ 2–3 ਫੋਨਾਂ ਵਿਚ cloud sync ਅਗਲੇ ਪੜਾਅ ਵਿੱਚ Firebase configuration ਤੋਂ ਬਾਅਦ ਜੋੜਿਆ ਜਾਵੇਗਾ। Gmail address ਇਕੱਲਾ ਕਾਫ਼ੀ ਨਹੀਂ ਹੁੰਦਾ।</p>
+ </div></section>
+</main><footer>Grandmother Dairy Farmer · Offline record book</footer>
+<script>
+const $=id=>document.getElementById(id);
+const today=new Date().toISOString().slice(0,10);
+$('today').textContent=today;
+['milkDate','serviceDate','healthDate','feedDate','moneyDate'].forEach(id=>$(id).value=today);
+let db=JSON.parse(localStorage.getItem('gdf_db')||'{"cows":[],"milk":[],"breed":[],"health":[],"feed":[],"money":[]}');
+const words={
+pa:{subtitle:'ਡੇਅਰੀ ਫਾਰਮ ਰਿਕਾਰਡ ਬੁੱਕ',cows:'ਕੁੱਲ ਪਸ਼ੂ',milkToday:'ਅੱਜ ਦਾ ਦੁੱਧ (L)',income:'ਕੁੱਲ ਆਮਦਨ',expense:'ਕੁੱਲ ਖਰਚਾ',quick:'ਫਾਰਮ ਦੀ ਜਾਣਕਾਰੀ',intro:'ਇਸ ਐਪ ਵਿੱਚ ਪਸ਼ੂ, ਦੁੱਧ, ਬਰੀਡਿੰਗ, ਸਿਹਤ, ਖੁਰਾਕ ਅਤੇ ਆਮਦਨ ਦੇ ਰਿਕਾਰਡ ਇਸ ਫੋਨ ਵਿੱਚ ਸੰਭਾਲੇ ਜਾਂਦੇ ਹਨ।',recent:'ਹਾਲੀਆ ਰਿਕਾਰਡ',cowsTab:'ਪਸ਼ੂ',milkTab:'ਦੁੱਧ',breedTab:'ਬਰੀਡਿੰਗ',healthTab:'ਸਿਹਤ',feedTab:'ਖੁਰਾਕ',moneyTab:'ਹਿਸਾਬ',backupTab:'ਬੈਕਅੱਪ',addCow:'ਨਵਾਂ ਪਸ਼ੂ ਜੋੜੋ',tag:'ਟੈਗ ਨੰਬਰ',name:'ਨਾਮ',breed:'ਨਸਲ',lactation:'ਲੈਕਟੇਸ਼ਨ',dob:'ਜਨਮ ਮਿਤੀ',status:'ਹਾਲਤ',notes:'ਨੋਟ',saveCow:'ਪਸ਼ੂ ਸੇਵ ਕਰੋ',cowList:'ਪਸ਼ੂਆਂ ਦੀ ਲਿਸਟ',milkEntry:'ਦੁੱਧ ਐਂਟਰੀ',animal:'ਪਸ਼ੂ / ਟੈਗ ਨੰਬਰ',date:'ਮਿਤੀ',shift:'ਵੇਲਾ',litres:'ਦੁੱਧ (ਲੀਟਰ)',save:'ਸੇਵ ਕਰੋ',history:'ਹਿਸਟਰੀ',breedEntry:'ਬਰੀਡਿੰਗ / ਸਰਵਿਸ ਰਿਕਾਰਡ',serviceDate:'ਸਰਵਿਸ ਮਿਤੀ',bull:'ਬੁੱਲ / ਸੀਮਨ',attempt:'ਸਰਵਿਸ ਨੰਬਰ',dueDate:'ਅੰਦਾਜ਼ਨ ਕੈਲਵਿੰਗ ਮਿਤੀ',calvingDate:'ਕੈਲਵਿੰਗ ਮਿਤੀ (ਜੇ ਹੋ ਗਈ)',calf:'ਵੱਛੇ ਦੀ ਜਾਣਕਾਰੀ',healthEntry:'ਸਿਹਤ / ਵੈਕਸੀਨ ਰਿਕਾਰਡ',kind:'ਕਿਸਮ',detail:'ਦਵਾਈ / ਵੈਕਸੀਨ / ਵੇਰਵਾ',dose:'ਡੋਜ਼',nextDate:'ਅਗਲੀ ਮਿਤੀ',feedEntry:'ਖੁਰਾਕ ਰਿਕਾਰਡ',feedType:'ਖੁਰਾਕ',quantity:'ਮਾਤਰਾ (kg)',cost:'ਖਰਚਾ (₹)',moneyEntry:'ਆਮਦਨ / ਖਰਚਾ',amount:'ਰਕਮ (₹)',backupTitle:'ਡਾਟਾ ਬੈਕਅੱਪ',backupInfo:'ਇਹ ਵਰਜਨ ਰਿਕਾਰਡ ਇਸ ਫੋਨ ਵਿੱਚ ਰੱਖਦਾ ਹੈ। ਦੂਜੇ ਫੋਨ ਨਾਲ ਆਪਣੇ ਆਪ sync ਨਹੀਂ ਹੁੰਦਾ। ਬੈਕਅੱਪ ਫਾਈਲ ਡਾਊਨਲੋਡ ਕਰਕੇ ਸੰਭਾਲੋ।',export:'ਬੈਕਅੱਪ ਡਾਊਨਲੋਡ ਕਰੋ',restore:'ਬੈਕਅੱਪ ਫਾਈਲ ਵਾਪਸ ਲੋਡ ਕਰੋ',print:'ਰਿਕਾਰਡ ਪ੍ਰਿੰਟ ਕਰੋ'},
+en:{subtitle:'Dairy farm record book',cows:'Total animals',milkToday:"Today's milk (L)",income:'Total income',expense:'Total expenses',quick:'Farm overview',intro:'Keep animal, milk, breeding, health, feed and finance records on this phone.',recent:'Recent records',cowsTab:'Animals',milkTab:'Milk',breedTab:'Breeding',healthTab:'Health',feedTab:'Feed',moneyTab:'Accounts',backupTab:'Backup',addCow:'Add animal',tag:'Tag number',name:'Name',breed:'Breed',lactation:'Lactation',dob:'Date of birth',status:'Status',notes:'Notes',saveCow:'Save animal',cowList:'Animal list',milkEntry:'Milk entry',animal:'Animal / tag',date:'Date',shift:'Shift',litres:'Milk (litres)',save:'Save',history:'History',breedEntry:'Breeding / service record',serviceDate:'Service date',bull:'Bull / semen',attempt:'Service number',dueDate:'Expected calving date',calvingDate:'Calving date (if done)',calf:'Calf details',healthEntry:'Health / vaccination record',kind:'Type',detail:'Medicine / vaccine / details',dose:'Dose',nextDate:'Next date',feedEntry:'Feed record',feedType:'Feed',quantity:'Quantity (kg)',cost:'Cost (₹)',moneyEntry:'Income / expense',amount:'Amount (₹)',backupTitle:'Data backup',backupInfo:'This version stores records on this phone. It does not automatically sync to other phones. Download and keep a backup file.',export:'Download backup',restore:'Restore backup file',print:'Print records'}};
+function setLang(l){document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{let k=e.dataset.i;if(words[l][k])e.textContent=words[l][k]})}
+function save(){localStorage.setItem('gdf_db',JSON.stringify(db));render()}
+function tab(t){document.querySelectorAll('.tab').forEach(x=>x.classList.add('hidden'));$(t).classList.remove('hidden');$('dashboard').classList.add('hidden');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));render()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function addCow(){let tag=$('cowTag').value.trim();if(!tag)return alert('Tag number is required');if(db.cows.some(c=>c.tag===tag))return alert('Tag already exists');db.cows.push({id:Date.now(),tag,name:$('cowName').value,breed:$('cowBreed').value,lact:$('cowLact').value,dob:$('cowDob').value,status:$('cowStatus').value,notes:$('cowNotes').value});['cowTag','cowName','cowBreed','cowLact','cowDob','cowNotes'].forEach(x=>$(x).value='');save()}
+function pick(id){return `<option value="">—</option>`+db.cows.map(c=>`<option value="${c.id}">${esc(c.tag)} ${esc(c.name)}</option>`).join('')}
+function addMilk(){if(!$('milkCow').value||!$('milkLitres').value)return alert('Select animal and enter litres');db.milk.unshift({id:Date.now(),cow:$('milkCow').value,date:$('milkDate').value,shift:$('milkShift').value,litres:+$('milkLitres').value});$('milkLitres').value='';save()}
+function addBreed(){if(!$('breedCow').value||!$('serviceDate').value)return alert('Select animal and service date');db.breed.unshift({id:Date.now(),cow:$('breedCow').value,date:$('serviceDate').value,bull:$('bull').value,attempt:$('attempt').value,due:$('dueDate').value,calving:$('calvingDate').value,calf:$('calf').value});save()}
+function addHealth(){if(!$('healthCow').value||!$('healthDetail').value)return alert('Select animal and enter details');db.health.unshift({id:Date.now(),cow:$('healthCow').value,date:$('healthDate').value,kind:$('healthKind').value,detail:$('healthDetail').value,dose:$('healthDose').value,next:$('healthNext').value});save()}
+function addFeed(){if(!$('feedType').value||!$('feedQty').value)return alert('Enter feed and quantity');db.feed.unshift({id:Date.now(),cow:$('feedCow').value,date:$('feedDate').value,type:$('feedType').value,qty:+$('feedQty').value,cost:+$('feedCost').value||0});save()}
+function addMoney(){if(!$('moneyAmount').value)return alert('Enter amount');db.money.unshift({id:Date.now(),date:$('moneyDate').value,kind:$('moneyKind').value,detail:$('moneyDetail').value,amount:+$('moneyAmount').value});save()}
+function cowName(id){let c=db.cows.find(c=>c.id==id);return c?c.tag+(c.name?' · '+c.name:''):'All animals'}
+function list(id,arr,fn){$(id).innerHTML=arr.length?arr.map(x=>`<div class="item"><div>${fn(x)}</div><button class="del" onclick="removeItem('${id}',${x.id})">×</button></div>`).join(''):'<div class="empty">No records yet</div>'}
+function removeItem(listId,id){let key={cowList:'cows',milkList:'milk',breedList:'breed',healthList:'health',feedList:'feed',moneyList:'money'}[listId];if(confirm('Delete this record?')){db[key]=db[key].filter(x=>x.id!==id);save()}}
+function render(){
+['milkCow','breedCow','healthCow','feedCow'].forEach(id=>$(id).innerHTML=pick(id));
+$('cowCount').textContent=db.cows.length;
+$('milkToday').textContent=db.milk.filter(x=>x.date===today).reduce((a,x)=>a+x.litres,0).toFixed(1);
+$('incomeTotal').textContent='₹'+db.money.filter(x=>x.kind==='income').reduce((a,x)=>a+x.amount,0).toLocaleString('en-IN');
+$('expenseTotal').textContent='₹'+(db.money.filter(x=>x.kind==='expense').reduce((a,x)=>a+x.amount,0)+db.feed.reduce((a,x)=>a+x.cost,0)).toLocaleString('en-IN');
+list('cowList',db.cows,x=>`<b>${esc(x.tag)} · ${esc(x.name)}</b><span class="muted">${esc(x.breed)} · ${esc(x.status)} · Lactation ${esc(x.lact)}</span>`);
+list('milkList',db.milk,x=>`<b>${esc(cowName(x.cow))} — ${x.litres} L</b><span class="muted">${x.date} · ${esc(x.shift)}</span>`);
+list('breedList',db.breed,x=>`<b>${esc(cowName(x.cow))} · ${esc(x.bull)}</b><span class="muted">${x.date} · Attempt ${x.attempt} · Due ${x.due||'—'} · Calving ${x.calving||'—'}</span><div class="muted">${esc(x.calf)}</div>`);
+list('healthList',db.health,x=>`<b>${esc(cowName(x.cow))} · ${esc(x.kind)}</b><span class="muted">${x.date} · ${esc(x.detail)} · Dose ${esc(x.dose)} · Next ${x.next||'—'}</span>`);
+list('feedList',db.feed,x=>`<b>${esc(cowName(x.cow))} · ${esc(x.type)} — ${x.qty} kg</b><span class="muted">${x.date} · ₹${x.cost}</span>`);
+list('moneyList',db.money,x=>`<b>${esc(x.kind)} · ₹${x.amount}</b><span class="muted">${x.date} · ${esc(x.detail)}</span>`);
+let recent=[...db.milk.slice(0,3).map(x=>({t:'Milk',d:x.date,v:x.litres+' L'})),...db.health.slice(0,2).map(x=>({t:'Health',d:x.date,v:x.detail}))].sort((a,b)=>b.d.localeCompare(a.d));
+$('recentList').innerHTML=recent.length?recent.map(x=>`<div class="item"><b>${esc(x.t)}: ${esc(x.v)}</b><span class="muted">${x.d}</span></div>`).join(''):'<div class="empty">ਹਾਲੇ ਕੋਈ ਰਿਕਾਰਡ ਨਹੀਂ</div>';
+}
+function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='grandmother-dairy-backup-'+today+'.json';a.click();URL.revokeObjectURL(a.href)}
+function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.cows||!x.milk)throw 0;db=x;save();alert('Backup restored')}catch(_){alert('Invalid backup file')}};r.readAsText(f)}
+render();
+if('serviceWorker' in navigator && location.protocol!=='file:'){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+</script>
 </body></html>

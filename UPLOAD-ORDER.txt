@@ -1,0 +1,13 @@
+Grandmother Dairy Farmer — 8 files
+
+Upload in this order:
+1. index.html
+2. manifest.webmanifest
+3. sw.js
+4. package.json
+5. capacitor.config.json
+6. scripts/copy-web.js
+7. .github/workflows/android.yml
+8. README-PUNJABI.txt
+
+Important: keep scripts/ and .github/workflows/ folder paths exactly as shown.

@@ -1,0 +1,9 @@
+{
+  "name": "Grandmother Dairy Farmer",
+  "short_name": "Dairy Farmer",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7f6ee",
+  "theme_color": "#315c3b",
+  "description": "Punjabi and English dairy farm record book"
+}

@@ -3,7 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "description": "Grandmother Dairy Farmer Android app",
-  "scripts": {"build": "echo Static app ready"},
-  "dependencies": {"@capacitor/android": "^7.4.3", "@capacitor/core": "^7.4.3"},
-  "devDependencies": {"@capacitor/cli": "^7.4.3"}
+  "scripts": {
+    "copy-web": "node scripts/copy-web.js",
+    "build": "npm run copy-web",
+    "cap:add:android": "npx cap add android",
+    "cap:sync": "npx cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.3"
+  }
 }
