@@ -1,0 +1,15 @@
+Grandmother Dairy Farmer - GitHub build fix
+
+This ZIP contains the two missing files in their required folder paths:
+1. scripts/copy-web.js
+2. .github/workflows/android.yml
+
+Extract the ZIP, then upload the CONTENTS (including the scripts and .github folders) into the root of:
+gurpreetsingh1083jal-jpg/grandmother-dairy-farmer
+
+Do not upload the outer ZIP folder itself. Keep the folder paths exactly as shown.
+The workflow builds a debug APK and uploads it as the artifact:
+grandmother-dairy-farmer-debug-apk
+
+Note: GitHub rejected direct changes from the connected integration with HTTP 403,
+so these files have not yet been committed to the repository.
