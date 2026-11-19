@@ -1,0 +1,6 @@
+{
+  "appId": "com.grandmotherdairyfarmer.app",
+  "appName": "Grandmother Dairy Farmer",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
